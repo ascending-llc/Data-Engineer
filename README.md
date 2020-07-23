@@ -23,28 +23,28 @@ You will login in as ec2-user and you have root privilege, you can use sudo comm
 ### 3 MasterNodes
 
 ```
-test-master-1: ip-172-31-0-225.ec2.internal
-test-master-2: ip-172-31-14-100.ec2.internal
-test-master-3: ip-172-31-12-6.ec2.internal
+master-1: ip-172-31-86-198.ec2.internal
+master-2: ip-172-31-93-228.ec2.internal
+master-3: ip-172-31-89-172.ec2.internal
 ```
 ### 3 WorkerNodes
 
 ```
-test-worker-1: ip-172-31-2-5.ec2.internal
-test-worker-2: ip-172-31-10-202.ec2.internal
-test-worker-3: ip-172-31-10-159.ec2.internal
+worker-1: ip-172-31-94-165.ec2.internal
+worker-2: ip-172-31-89-11.ec2.internal
+worker-3: ip-172-31-91-232.ec2.internal
 ```
 
 ### 1 UtilityNode
 
 ```
-test-utility-1: ip-172-31-13-70.ec2.internal
+utility-1: ip-172-31-91-213.ec2.internal
 ```
 
 ### 1 GatewayNode
 
 ```
-test-gateway-1: ip-172-31-13-176.ec2.internal
+gateway-1: ip-172-31-92-98.ec2.internal
 ```
 
 ### SSH into Node Instance
