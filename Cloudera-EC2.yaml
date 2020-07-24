@@ -1,0 +1,35 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cloudformation template to create Cloudera Resources
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC with Subnets covering 2 Availability zone at least.
+    MinLength: 1
+Resources:
+  ClouderaEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-000db10762d0c4c05
+      InstanceType: t2.large
+      KeyName: jumpbox
+      SecurityGroupIds:
+        - sg-09b18debe8102f5dc
+      SubnetId: subnet-dbf62993
+      UserData:
+        Fn::Base64: 
+          !Sub |
+          #!/bin/bash -xe
+          yum update -y
+          yum install cloud-init -y
+          yum install wget -y
+          wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
+          tar zxvf mysql-connector-java-5.1.46.tar.gz
+          mkdir -p /usr/share/java/
+          cd mysql-connector-java-5.1.46
+          sudo cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
+          sysctl -w vm.swappiness=1
+          echo never > /sys/kernel/mm/transparent_hugepage/defrag
+          echo never > /sys/kernel/mm/transparent_hugepage/enabled
+          echo "echo never > /sys/kernel/mm/transparent_hugepage/defrag" >> /etc/rc.local
+          echo "echo never > /sys/kernel/mm/transparent_hugepage/enabled" >> /etc/rc.local

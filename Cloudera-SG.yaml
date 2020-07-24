@@ -1,0 +1,153 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cloudformation template to create Cloudera Resources
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC with Subnets covering 2 Availability zone at least.
+    MinLength: 1
+Resources:
+  ClouderaGatewaySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cloudera Gateway Nodes security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '8888'
+          ToPort: '8889'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '10002'
+          ToPort: '10002'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        -
+          Key: Name
+          Value: ClouderaGatewaySG
+      VpcId: !Ref VpcId
+
+  ClouderaMasterSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cloudera Master Nodes security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '8088'
+          ToPort: '8088'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '9870'
+          ToPort: '9870'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '16010'
+          ToPort: '16010'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '19888'
+          ToPort: '19888'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        -
+          Key: Name
+          Value: ClouderaMasterSG
+      VpcId: !Ref VpcId
+
+  ClouderaUtilitySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cloudera Utility Nodes security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '8086'
+          ToPort: '8086'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '11000'
+          ToPort: '11000'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '25010'
+          ToPort: '25010'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '25020'
+          ToPort: '25020'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        -
+          Key: Name
+          Value: ClouderaUtilitySG
+      VpcId: !Ref VpcId
+
+  ClouderaInternalSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cloudera Utility Nodes security group
+      # SecurityGroupIngress:
+      #   - IpProtocol: tcp
+      #     FromPort: '0'
+      #     ToPort: '65535'
+      #     SourceSecurityGroupId: !Ref ClouderaInternalSG
+      Tags:
+        -
+          Key: Name
+          Value: ClouderaInternalSG
+      VpcId: !Ref VpcId
+
+  ClouderaInternalSGIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      FromPort: '0'
+      ToPort: '65535'
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref ClouderaInternalSG
+      GroupId: !Ref ClouderaInternalSG
+
+  ClouderaJumpboxSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cloudera Jumpbox Nodes security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '7180'
+          ToPort: '7180'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        -
+          Key: Name
+          Value: ClouderaJumpboxSG
+      VpcId: !Ref VpcId
+
+Outputs:
+  ClouderaGatewaySG:
+    Value: !Ref ClouderaGatewaySG
+    Description: ClouderaGatewaySG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-ClouderaGatewaySG"
+  ClouderaMasterSG:
+    Value: !Ref ClouderaMasterSG
+    Description: ClouderaMasterSG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-ClouderaMasterSG"
+  ClouderaUtilitySG:
+    Value: !Ref ClouderaUtilitySG
+    Description: ClouderaUtilitySG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-WorkerNodeSG"
+  ClouderaInternalSG:
+    Value: !Ref ClouderaInternalSG
+    Description: ClouderaInternalSG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-PostgreSQLSG"
+  ClouderaJumpboxSG:
+    Value: !Ref ClouderaJumpboxSG
+    Description: ClouderaJumpboxSG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-ClouderaJumpboxSG"
+  StackName:
+    Value: !Ref AWS::StackName
