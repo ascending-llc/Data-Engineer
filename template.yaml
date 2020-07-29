@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 60
+    Runtime: python3.7
+
+Resources:
+  SwitchClouderaInstances:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/
+      Handler: lambda.switch_instances
+      Role: !GetAtt LambdaRole.Arn
+
+  CreateIamUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/
+      Handler: CreateUser.create_aws_user
+      Role: !GetAtt LambdaRole.Arn
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement: 
+          - 
+            Effect: Allow
+            Principal: 
+              Service: 
+                - lambda.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      Policies:
+        -
+          PolicyName: LambdaRolePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - cloudwatch:*
+                  - s3:*
+                  - logs:*
+                  - ssm:*
+                  - dynamodb:*
+                  - ec2:*
+                  - iam:*
+                Resource: "*"

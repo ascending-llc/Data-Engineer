@@ -1,0 +1,23 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cloudformation template to create Cloudera Resources
+
+Resources:
+  DataEngineerStudentsGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: DataEngineerStudents
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+
+  DataEngineerInstructorsGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: DataEngineerInstructors
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonRDSFullAccess

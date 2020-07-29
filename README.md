@@ -69,6 +69,12 @@ aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function
 aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function:cloudera-lambda-SwitchClouderaInstances-1NEWLX6F20VFK --payload '{ "status": "off" }' response.json
 ```
 
+### Create AWS User
+
+```sh
+aws lambda invoke --function-name cloudera-lambda-CreateIamUser-1APZ0OUSDRPIS --payload '{ "username": "test0729", "group": "student" }' response.json
+```
+
 ## Login in database
 
 ### Method 1: Login in via Cloudera Manager Instance
