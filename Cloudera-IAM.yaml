@@ -8,16 +8,103 @@ Resources:
     Properties:
       GroupName: DataEngineerStudents
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSLambdaReadOnlyAccess
+      Policies:
+        - 
+          PolicyName: DataEngineerStudentsPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - 
+                Effect: Allow
+                Action:
+                  - logs:Describe*
+                  - logs:Get*
+                  - logs:List*
+                  - cloudwatch:Describe*
+                  - cloudwatch:Get*
+                  - cloudwatch:List*
+                  - s3:ListAllMyBuckets
+                  - rds:Describe*
+                Resource: "*"
+              -
+                Effect: Allow
+                Action: 
+                  - s3:ListBucket
+                  - s3:GetBucketLocation
+                Resource: arn:aws:s3:::ascending-data-engineer
+              -
+                Effect: Allow
+                Action: 
+                  - s3:Get*
+                  - s3:List*
+                Resource: arn:aws:s3:::ascending-data-engineer/*
+              - 
+                Effect: Allow
+                Action:
+                  - iam:GetAccountPasswordPolicy
+                Resource: "*"
+              -
+                Effect: Allow
+                Action: 
+                  - iam:ChangePassword
+                Resource: arn:aws:iam::595312265488:user/${aws:username}
 
   DataEngineerInstructorsGroup:
     Type: AWS::IAM::Group
     Properties:
       GroupName: DataEngineerInstructors
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonEC2FullAccess
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
-        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
+        - arn:aws:iam::aws:policy/AWSLambdaReadOnlyAccess
+      Policies:
+        - 
+          PolicyName: DataEngineerStudentsPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - 
+                Effect: Allow
+                Action:
+                  - ec2:Describe*
+                  - rds:Describe*
+                  - logs:Describe*
+                  - logs:Get*
+                  - logs:List*
+                  - cloudwatch:Describe*
+                  - cloudwatch:Get*
+                  - cloudwatch:List*
+                  - s3:ListAllMyBuckets
+                Resource: "*"
+                # Condition:
+                #   StringEquals:
+                #     ec2:Region: us-east-1
+              -
+                Effect: Allow
+                Action: 
+                  - s3:ListBucket
+                Resource: arn:aws:s3:::ascending-data-engineer
+              -
+                Effect: Allow
+                Action: 
+                  - s3:*
+                Resource: arn:aws:s3:::ascending-data-engineer/*
+              -
+                Effect: Allow
+                Action:
+                  - rds:*
+                Resource: arn:aws:rds:us-east-1:595312265488:db:wordpress
+              -
+                Effect: Allow
+                Action:
+                  - lambda:*
+                Resource: arn:aws:lambda:us-east-1:595312265488:function:cloudera-lambda-*
+              - 
+                Effect: Allow
+                Action:
+                  - iam:GetAccountPasswordPolicy
+                Resource: "*"
+              -
+                Effect: Allow
+                Action: 
+                  - iam:ChangePassword
+                Resource: arn:aws:iam::595312265488:user/${aws:username}

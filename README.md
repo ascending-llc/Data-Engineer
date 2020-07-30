@@ -72,7 +72,7 @@ aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function
 ### Create AWS User
 
 ```sh
-aws lambda invoke --function-name cloudera-lambda-CreateIamUser-1APZ0OUSDRPIS --payload '{ "username": "test0729", "group": "student" }' response.json
+aws lambda invoke --function-name cloudera-lambda-CreateIamUser-1APZ0OUSDRPIS --payload '{ "username": "test0730", "group": "student", "email": "leyi@frugalops.com" }' response.json
 ```
 
 ## Login in database

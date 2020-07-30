@@ -5,6 +5,8 @@ Globals:
   Function:
     Timeout: 60
     Runtime: python3.7
+    Layers:
+      - !Ref Layer
 
 Resources:
   SwitchClouderaInstances:
@@ -51,3 +53,11 @@ Resources:
                   - ec2:*
                   - iam:*
                 Resource: "*"
+
+  Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: 's3://ascending-devops/layers/layer0714.zip'
+      CompatibleRuntimes:
+        - python3.7
+      RetentionPolicy: Delete
