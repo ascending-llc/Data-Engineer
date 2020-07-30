@@ -96,3 +96,57 @@ ssh -L 3306:wordpress.c6tqxth4eafz.us-east-1.rds.amazonaws.com:3306 ec2-user@54.
 ```
 
 Then you can visit database in localhost:3306 with your own mysql client tool.
+
+## Cloudera Monitor Website
+
+### Hbase
+
+```
+https://hbase-1.ascendingdc.com/master-status
+https://hbase-2.ascendingdc.com/master-status
+https://hbase-3.ascendingdc.com/master-status
+```
+
+### HDFS
+
+```
+https://hdfs.ascendingdc.com
+```
+
+### Hive
+
+```
+https://hive.ascendingdc.com
+```
+
+### Hue
+
+```
+https://hue.ascendingdc.com
+```
+
+### Impala
+
+```
+https://impala-state.ascendingdc.com
+https://impala-catalog.ascendingdc.com
+```
+
+### Oozie
+
+```
+https://oozie.ascendingdc.com
+```
+
+### Spark
+
+```
+https://spark.ascendingdc.com
+```
+
+### Yarn
+
+```
+https://yarn.ascendingdc.com/cluster
+https://yarn-history.ascendingdc.com
+```
