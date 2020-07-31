@@ -93,6 +93,42 @@ Resources:
         - Id: i-056fba1a84e21dda2
           Port: 25020
 
+  ClouderaImpalaDaemon1TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-daemon-1
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0a56b62e7f90cd6c4
+          Port: 25000
+
+  ClouderaImpalaDaemon2TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-daemon-2
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0a727858186f53239
+          Port: 25000
+
+  ClouderaImpalaDaemon3TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-daemon-3
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-00c2604ef7379f2f4
+          Port: 25000
+
   ClouderaOozieTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -128,3 +164,39 @@ Resources:
       Targets:
         - Id: i-0c2080fc1f5bf88f5
           Port: 19888
+
+  ClouderaKuduMaster1Group:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Kudu-Master-1
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0c2080fc1f5bf88f5
+          Port: 8051
+
+  ClouderaKuduMaster2Group:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Kudu-Master-2
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0b9c6b3ab3bf55f26
+          Port: 8051
+
+  ClouderaKuduMaster3Group:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Kudu-Master-3
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0181a59e1d41114d4
+          Port: 8051

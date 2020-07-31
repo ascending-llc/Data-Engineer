@@ -132,6 +132,13 @@ https://impala-state.ascendingdc.com
 https://impala-catalog.ascendingdc.com
 ```
 
+### Impala Daemon
+```
+https://impala-daemon-1.ascendingdc.com
+https://impala-daemon-2.ascendingdc.com
+https://impala-daemon-3.ascendingdc.com
+```
+
 ### Oozie
 
 ```
@@ -149,4 +156,12 @@ https://spark.ascendingdc.com
 ```
 https://yarn.ascendingdc.com/cluster
 https://yarn-history.ascendingdc.com
+```
+
+### Kudu
+
+```
+https://kudu-master-1.ascendingdc.com
+https://kudu-master-2.ascendingdc.com
+https://kudu-master-3.ascendingdc.com
 ```
