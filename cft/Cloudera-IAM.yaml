@@ -38,6 +38,7 @@ Resources:
                 Action: 
                   - s3:Get*
                   - s3:List*
+                  - s3:Write*
                 Resource: arn:aws:s3:::ascending-data-engineer/*
               - 
                 Effect: Allow
@@ -55,34 +56,13 @@ Resources:
     Properties:
       GroupName: DataEngineerInstructors
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AWSLambdaReadOnlyAccess
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
       Policies:
         - 
-          PolicyName: DataEngineerStudentsPolicy
+          PolicyName: DataEngineerInstructorsPolicy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
-              - 
-                Effect: Allow
-                Action:
-                  - ec2:Describe*
-                  - rds:Describe*
-                  - logs:Describe*
-                  - logs:Get*
-                  - logs:List*
-                  - cloudwatch:Describe*
-                  - cloudwatch:Get*
-                  - cloudwatch:List*
-                  - s3:ListAllMyBuckets
-                Resource: "*"
-                # Condition:
-                #   StringEquals:
-                #     ec2:Region: us-east-1
-              -
-                Effect: Allow
-                Action: 
-                  - s3:ListBucket
-                Resource: arn:aws:s3:::ascending-data-engineer
               -
                 Effect: Allow
                 Action: 

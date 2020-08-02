@@ -8,6 +8,7 @@ awscli = "*"
 aws-sam-cli = "*"
 boto3 = "*"
 sam = "*"
+ansible = "*"
 
 [requires]
 python_version = '3.7.2'

@@ -17,7 +17,7 @@ def create_aws_user(event,context):
 		]
 	)
 
-	group_dict = { 'student': 'DataEngineerStudents', 'instructor': 'DataEngineerInstructors'}
+	group_dict = { 'students': 'DataEngineerStudents', 'instructors': 'DataEngineerInstructors'}
 
 	response = client.add_user_to_group(
 		GroupName=group_dict[event['group']],

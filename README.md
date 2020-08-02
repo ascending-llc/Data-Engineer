@@ -69,10 +69,10 @@ aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function
 aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function:cloudera-lambda-SwitchClouderaInstances-1NEWLX6F20VFK --payload '{ "status": "off" }' response.json
 ```
 
-### Create AWS User
+### Create AWS Console User and Jumpbox Linux User with Ansible
 
 ```sh
-aws lambda invoke --function-name cloudera-lambda-CreateIamUser-1APZ0OUSDRPIS --payload '{ "username": "test0730", "group": "student", "email": "leyi@frugalops.com" }' response.json
+ansible-playbook CreateUser.yaml -e @/Users/yi/Documents/Data-Engineer/ansible/UserInfo.yaml
 ```
 
 ## Login in database
