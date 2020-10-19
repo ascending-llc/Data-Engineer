@@ -2,3 +2,5 @@ response.json
 packaged.yaml
 
 local.py
+
+.python-version

@@ -1,0 +1,20 @@
+---
+
+- name: generate key pair
+  hosts: 127.0.0.1
+  connection: local
+  become: True
+  tasks:
+    - include_vars: UserInfo.yaml
+
+    - name: generate key pair in jumpbox
+      openssh_keypair:
+        mode: '600'
+        owner: "{{ item.username }}"
+        path: "{{ item.path }}"
+      with_items: '{{users}}'
+      register: result
+      
+    - debug: msg="{{ result.results }}"
+
+

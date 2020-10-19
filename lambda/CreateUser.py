@@ -40,7 +40,7 @@ def create_aws_user(event,context):
 	message = Mail('no-reply@ascendingdc.com',
 		to_emails=event['email'],
 		subject='AWS Console Credentials',
-		html_content='https://595312265488.signin.aws.amazon.com/console' + '<br>' + 'Your username is ' + event['username'] + '<br>' + 'Your temporary password is ' + password)
+		html_content='https://595312265488.signin.aws.amazon.com/console' + '<br>' + 'Your username is ' + event['username'] + '<br>' + 'Your temporary password is ' + password + '<br>' + 'Connect to jumpbox server: ssh ' + event['username'] + '@54.86.193.122')
 
 	try:
 		sg = SendGridAPIClient(response_ssm['Parameters'][0]['Value'])

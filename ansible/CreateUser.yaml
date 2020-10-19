@@ -11,7 +11,7 @@
     - name: Add a new student user
       user:
         name: "{{ item.username }}"
-        groups: "{{ item.group }}"
+        # groups: "{{ item.group }}"
         shell: /bin/bash
         append: yes
         # state: absent

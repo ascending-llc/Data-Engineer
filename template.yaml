@@ -15,6 +15,46 @@ Resources:
       CodeUri: lambda/
       Handler: SwitchInstances.switch_instances
       Role: !GetAtt LambdaRole.Arn
+      Events:
+        StartInstancesEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 20 ? * MON-FRI *)
+        StartInstancesEvents2:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 14 ? * L *)
+        StopInstancesEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 2 ? * * *)
+        StopInstancesEvents2:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(59 23 ? * L *)
+
+  # TurnOnClouderaInstances:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: lambda/
+  #     Handler: SwitchInstances.turn_on_instances
+  #     Role: !GetAtt LambdaRole.Arn
+  #     Events:
+  #       CronJobEvents:
+  #         Type: Schedule
+  #         Properties:
+
+
+  # TurnOffClouderaInstances:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: lambda/
+  #     Handler: SwitchInstances.turn_off_instances
+  #     Role: !GetAtt LambdaRole.Arn
 
   CreateIamUser:
     Type: AWS::Serverless::Function

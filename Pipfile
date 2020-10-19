@@ -1,14 +1,14 @@
 [[source]]
-url = 'https://pypi.python.org/simple'
+name = "pypi"
+url = "https://pypi.org/simple"
 verify_ssl = true
-name = 'pypi'
+
+[dev-packages]
 
 [packages]
 awscli = "*"
-aws-sam-cli = "*"
 boto3 = "*"
-sam = "*"
 ansible = "*"
 
 [requires]
-python_version = '3.7.2'
+python_version = "3.8"

@@ -1,0 +1,28 @@
+---
+
+- name: install git, maven and pyspark, kafka-python
+  hosts: cloudera
+  gather_facts: false
+  remote_user: ec2-user
+  become: True
+  tasks:
+    - get_url:
+        url: http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo
+        dest: /etc/yum.repos.d/epel-apache-maven.repo
+
+    - get_url:
+        url: https://bootstrap.pypa.io/get-pip.py
+        dest: /home/ec2-user/get-pip.py
+  
+    - command: python /home/ec2-user/get-pip.py
+  
+    - yum:
+        name:
+          - git
+          - apache-maven
+        state: latest
+    
+    - pip:
+        name:
+          - pyspark>=3.0.1
+          - kafka-python>=2.0.2
