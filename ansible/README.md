@@ -9,3 +9,11 @@
 ```sh
 python register.py
 ```
+
+## Run in Jumpbox
+
+```bash
+ansible-playbook --connection=local --inventory 127.0.0.1, Keypair.yaml -e @/home/ec2-user/ansible/UserInfo.yaml
+
+ansible-playbook CreateUser.yaml -e @/home/ec2-user/ansible/UserInfo2.yaml
+```

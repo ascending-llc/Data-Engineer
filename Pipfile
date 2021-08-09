@@ -9,6 +9,7 @@ verify_ssl = true
 awscli = "*"
 boto3 = "*"
 ansible = "*"
+sympy = "*"
 
 [requires]
 python_version = "3.8"

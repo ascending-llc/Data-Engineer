@@ -20,22 +20,12 @@ Resources:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 20 ? * MON-FRI *)
-        StartInstancesEvents2:
-          Type: Schedule
-          Properties:
-            Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 14 ? * L *)
+            Schedule: cron(0 18 ? * WED-FRI *)
         StopInstancesEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 2 ? * * *)
-        StopInstancesEvents2:
-          Type: Schedule
-          Properties:
-            Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(59 23 ? * L *)
+            Schedule: cron(0 20 ? * * *)
 
   # TurnOnClouderaInstances:
   #   Type: AWS::Serverless::Function

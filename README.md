@@ -165,3 +165,9 @@ https://kudu-master-1.ascendingdc.com
 https://kudu-master-2.ascendingdc.com
 https://kudu-master-3.ascendingdc.com
 ```
+
+```bash
+ansible-playbook --connection=local --inventory 127.0.0.1, Keypair.yaml -e @/home/ec2-user/ansible/UserInfo.yaml
+
+ansible-playbook CreateUser.yaml -e @/home/ec2-user/ansible/UserInfo2.yaml
+```
