@@ -1,0 +1,334 @@
+Resources:
+  ClouderaAlertReceiverTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: email
+          Endpoint: zuoping.chen@ascendingdc.com
+
+  ClouderaMaxNetworkinAlerm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: Cloudera-max-Networkin-alerm-cfm
+      ActionsEnabled: true
+      OKActions: []
+      AlarmActions:
+        - !Ref ClouderaAlertReceiverTopic
+      InsufficientDataActions: []
+      Dimensions: []
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 50000000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      Metrics:
+        - Id: e1
+          Label: Cloudera-max-Networkin
+          ReturnData: true
+          Expression: MAX([m1, m2, m3, m4, m5, m6, m7, m8])
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0181a59e1d41114d4
+            Period: 60
+            Stat: Average
+        - Id: m2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0a56b62e7f90cd6c4
+            Period: 60
+            Stat: Average
+        - Id: m3
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0b9c6b3ab3bf55f26
+            Period: 60
+            Stat: Average
+        - Id: m4
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-00c2604ef7379f2f4
+            Period: 60
+            Stat: Average
+        - Id: m5
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0c2080fc1f5bf88f5
+            Period: 60
+            Stat: Average
+        - Id: m6
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-056fba1a84e21dda2
+            Period: 60
+            Stat: Average
+        - Id: m7
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0291efea65f611d43
+            Period: 60
+            Stat: Average
+        - Id: m8
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkIn
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0a727858186f53239
+            Period: 60
+            Stat: Average
+
+  ClouderaMaxNetworkoutAlerm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: Cloudera-max-Networkout-alerm-cfm
+      ActionsEnabled: true
+      OKActions: []
+      AlarmActions:
+        - !Ref ClouderaAlertReceiverTopic
+      InsufficientDataActions: []
+      Dimensions: []
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 50000000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      Metrics:
+        - Id: e1
+          Label: Cloudera-max-Networkout
+          ReturnData: true
+          Expression: MAX([m1, m2, m3, m4, m5, m6, m7, m8])
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0181a59e1d41114d4
+            Period: 60
+            Stat: Average
+        - Id: m2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0a56b62e7f90cd6c4
+            Period: 60
+            Stat: Average
+        - Id: m3
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0b9c6b3ab3bf55f26
+            Period: 60
+            Stat: Average
+        - Id: m4
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-00c2604ef7379f2f4
+            Period: 60
+            Stat: Average
+        - Id: m5
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0c2080fc1f5bf88f5
+            Period: 60
+            Stat: Average
+        - Id: m6
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-056fba1a84e21dda2
+            Period: 60
+            Stat: Average
+        - Id: m7
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0291efea65f611d43
+            Period: 60
+            Stat: Average
+        - Id: m8
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: NetworkOut
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0a727858186f53239
+            Period: 60
+            Stat: Average
+
+  ClouderaMaxCPUUtilizationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: Cloudera-max-CPUUtilization-alarm-cfm
+      ActionsEnabled: true
+      OKActions: []
+      AlarmActions:
+        - !Ref ClouderaAlertReceiverTopic
+      InsufficientDataActions: []
+      Dimensions: []
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 75
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      Metrics:
+        - Id: e1
+          Label: Cloudera-max-CPUUtilization
+          ReturnData: true
+          Expression: MAX([m1, m2, m3, m4, m5, m6, m7, m8])
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0181a59e1d41114d4
+            Period: 60
+            Stat: Average
+        - Id: m2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0a56b62e7f90cd6c4
+            Period: 60
+            Stat: Average
+        - Id: m3
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0b9c6b3ab3bf55f26
+            Period: 60
+            Stat: Average
+        - Id: m4
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-00c2604ef7379f2f4
+            Period: 60
+            Stat: Average
+        - Id: m5
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0c2080fc1f5bf88f5
+            Period: 60
+            Stat: Average
+        - Id: m6
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-056fba1a84e21dda2
+            Period: 60
+            Stat: Average
+        - Id: m7
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0291efea65f611d43
+            Period: 60
+            Stat: Average
+        - Id: m8
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/EC2
+              MetricName: CPUUtilization
+              Dimensions:
+                - Name: InstanceId
+                  Value: i-0a727858186f53239
+            Period: 60
+            Stat: Average
