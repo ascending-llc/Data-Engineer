@@ -16,16 +16,26 @@ Resources:
       Handler: SwitchInstances.switch_instances
       Role: !GetAtt LambdaRole.Arn
       Events:
-        StartInstancesEvents:
+        StartInstancesOnMonWedFriEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 18 ? * WED-FRI *)
-        StopInstancesEvents:
+            Schedule: cron(0 18 ? * MON,WED,FRI *)
+        StartInstancesOnTueThuSatEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 0 ? * WED,FRI,SUN *)
+        StopInstancesOnMonWedFriEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 20 ? * * *)
+            Schedule: cron(0 2 ? * WED,FRI,SUN *)
+        StopInstancesOnTueThuSatEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 20 ? * MON,WED,FRI *)
 
   # TurnOnClouderaInstances:
   #   Type: AWS::Serverless::Function
