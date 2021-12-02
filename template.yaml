@@ -16,22 +16,22 @@ Resources:
       Handler: SwitchInstances.switch_instances
       Role: !GetAtt LambdaRole.Arn
       Events:
-        StartInstancesOnMonWedFriEvents:
+        StartOnMonWedFriEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
             Schedule: cron(0 18 ? * MON,WED,FRI *)
-        StartInstancesOnTueThuSatEvents:
+        StartOnTueThuSatEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
             Schedule: cron(0 0 ? * WED,FRI,SUN *)
-        StopInstancesOnMonWedFriEvents:
+        StopOnMonWedFriEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
             Schedule: cron(0 2 ? * WED,FRI,SUN *)
-        StopInstancesOnTueThuSatEvents:
+        StopOnTueThuSatEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
