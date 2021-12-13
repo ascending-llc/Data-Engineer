@@ -16,26 +16,51 @@ Resources:
       Handler: SwitchInstances.switch_instances
       Role: !GetAtt LambdaRole.Arn
       Events:
-        StartOnMonWedFriEvents:
+        StartOnMonWedEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 18 ? * MON,WED,FRI *)
-        StartOnTueThuSatEvents:
+            Schedule: cron(0 18 ? * MON,WED *)
+        StartOnTueThuEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 0 ? * WED,FRI,SUN *)
-        StopOnMonWedFriEvents:
+            Schedule: cron(0 0 ? * WED,FRI *)
+        StartOnFriEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 23 ? * FRI *)
+        StartOnSunEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 18 ? * SUN *)
+        StartOnOfficeHourEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 0 ? * THU *)
+        StopOnMonWedEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 2 ? * WED,FRI,SUN *)
-        StopOnTueThuSatEvents:
+            Schedule: cron(0 2 ? * WED,FRI *)
+        StopOnTueThuEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 20 ? * MON,WED,FRI *)
+            Schedule: cron(0 20 ? * MON,WED *)
+        StopOnFriEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 4 ? * SAT *)
+        StopOnSunEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 23 ? * SUN *)
 
   # TurnOnClouderaInstances:
   #   Type: AWS::Serverless::Function
