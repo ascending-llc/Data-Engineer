@@ -5,15 +5,14 @@
 ### Login in Cloudera Manager Instance
 
 ```
-http://54.86.193.122:7180
+http://54.210.192.41:7180
+https://data.ascendingdc.com
 ```
-
-Currently you may have some problems viewing charts and tables in https://data.ascendingdc.com please use ip address above.
 
 ### SSH into Cloudera Manager Instance
 
 ```sh
-ssh ec2-user@54.86.193.122
+ssh ec2-user@54.210.192.41
 ```
 
 You will login in as ec2-user and you have root privilege, you can use sudo command without password
@@ -170,4 +169,19 @@ https://kudu-master-3.ascendingdc.com
 ansible-playbook --connection=local --inventory 127.0.0.1, Keypair.yaml -e @/home/ec2-user/ansible/UserInfo.yaml
 
 ansible-playbook CreateUser.yaml -e @/home/ec2-user/ansible/UserInfo2.yaml
+```
+
+
+```
+# Cloudera Manager Error: Rejecting request originating from x.x.x.x for http://xxx/cmf/services/landingPageStatusContent with referrer https://xxx.com/cmf/home
+
+cd /opt/cloudera/cm/webapp/WEB-INF/spring/mvc-config.xml
+
+# Comment CsrfRefererInterceptor
+
+<!-- <bean class="com.cloudera.server.web.cmf.csrf.CsrfRefererInterceptor"/> -->
+
+# Restart server
+
+sudo service cloudera-scm-server restart
 ```
