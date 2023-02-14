@@ -16,51 +16,47 @@ Resources:
       Handler: SwitchInstances.switch_instances
       Role: !GetAtt LambdaRole.Arn
       Events:
-        StartOnMonWedEvents:
+        StartLabWeekDayEvent:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 18 ? * MON,WED *)
-        StartOnTueThuEvents:
+            Schedule: cron(0 1 ? * TUE,WED,SAT *)
+        StopLabWeekDayEvent:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 3 ? * TUE,WED,SAT *)
+        StartLabSatEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 0 ? * WED,FRI *)
-        StartOnFriEvents:
+            Schedule: cron(0 19 ? * SAT *)
+        StopLabSatEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 22 ? * SAT *)
+        StartOnWedEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 23 ? * FRI *)
+            Schedule: cron(0 0 ? * FRI *)
+        StopOnWedEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 3 ? * FRI *)
         StartOnSunEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 18 ? * SUN *)
-        StartOnOfficeHourEvents:
-          Type: Schedule
-          Properties:
-            Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 0 ? * THU *)
-        StopOnMonWedEvents:
-          Type: Schedule
-          Properties:
-            Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 2 ? * WED,FRI *)
-        StopOnTueThuEvents:
-          Type: Schedule
-          Properties:
-            Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 20 ? * MON,WED *)
-        StopOnFriEvents:
-          Type: Schedule
-          Properties:
-            Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 4 ? * SAT *)
+            Schedule: cron(30 19 ? * SUN *)
         StopOnSunEvents:
           Type: Schedule
           Properties:
-            Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 23 ? * SUN *)
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(30 22 ? * SUN *)
+        
 
   # TurnOnClouderaInstances:
   #   Type: AWS::Serverless::Function
