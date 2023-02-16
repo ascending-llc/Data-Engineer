@@ -40,12 +40,12 @@ Resources:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 0 ? * FRI *)
+            Schedule: cron(0 0 ? * THU *)
         StopOnWedEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 3 ? * FRI *)
+            Schedule: cron(0 3 ? * THU *)
         StartOnSunEvents:
           Type: Schedule
           Properties:
