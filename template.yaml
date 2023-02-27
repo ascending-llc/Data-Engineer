@@ -20,22 +20,32 @@ Resources:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 1 ? * TUE,WED,SAT *)
+            Schedule: cron(0 1 ? * WED,FRI *)
         StopLabWeekDayEvent:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 3 ? * TUE,WED,SAT *)
+            Schedule: cron(0 3 ? * WED,FRI *)
         StartLabSatEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"on\"}"
-            Schedule: cron(0 19 ? * SAT *)
+            Schedule: cron(0 0 ? * SUN *)
         StopLabSatEvents:
           Type: Schedule
           Properties:
             Input: "{ \"status\" : \"off\"}"
-            Schedule: cron(0 22 ? * SAT *)
+            Schedule: cron(0 3 ? * SUN *)
+        StartLabSunEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 17 ? * SUN *)
+        StopLabSunEvents:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 19 ? * SUN *)
         StartOnWedEvents:
           Type: Schedule
           Properties:
