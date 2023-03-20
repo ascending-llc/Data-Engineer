@@ -4,7 +4,7 @@ Resources:
     Properties:
       Subscription:
         - Protocol: email
-          Endpoint: zuoping.chen@ascendingdc.com
+          Endpoint: kaiqi.yu@ascendingdc.com
 
   ClouderaMaxNetworkinAlerm:
     Type: AWS::CloudWatch::Alarm
@@ -34,7 +34,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0181a59e1d41114d4
+                  Value: i-01611f2d40e38d03c
             Period: 60
             Stat: Average
         - Id: m2
@@ -45,7 +45,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0a56b62e7f90cd6c4
+                  Value: i-0cd42200e37b68a15
             Period: 60
             Stat: Average
         - Id: m3
@@ -56,7 +56,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0b9c6b3ab3bf55f26
+                  Value: i-0b1f937767ad38819
             Period: 60
             Stat: Average
         - Id: m4
@@ -67,7 +67,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-00c2604ef7379f2f4
+                  Value: i-0c5e5f01fa15a6c72
             Period: 60
             Stat: Average
         - Id: m5
@@ -78,7 +78,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0c2080fc1f5bf88f5
+                  Value: i-03ba61764408c3b85
             Period: 60
             Stat: Average
         - Id: m6
@@ -89,7 +89,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-056fba1a84e21dda2
+                  Value: i-0db3135144959852f
             Period: 60
             Stat: Average
         - Id: m7
@@ -100,7 +100,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0291efea65f611d43
+                  Value: i-01234d15917873831
             Period: 60
             Stat: Average
         - Id: m8
@@ -111,7 +111,7 @@ Resources:
               MetricName: NetworkIn
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0a727858186f53239
+                  Value: i-06533a3aabeaf7adc
             Period: 60
             Stat: Average
 
@@ -143,7 +143,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0181a59e1d41114d4
+                  Value: i-01611f2d40e38d03c
             Period: 60
             Stat: Average
         - Id: m2
@@ -154,7 +154,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0a56b62e7f90cd6c4
+                  Value: i-0cd42200e37b68a15
             Period: 60
             Stat: Average
         - Id: m3
@@ -165,7 +165,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0b9c6b3ab3bf55f26
+                  Value: i-0b1f937767ad38819
             Period: 60
             Stat: Average
         - Id: m4
@@ -176,7 +176,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-00c2604ef7379f2f4
+                  Value: i-0c5e5f01fa15a6c72
             Period: 60
             Stat: Average
         - Id: m5
@@ -187,7 +187,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0c2080fc1f5bf88f5
+                  Value: i-03ba61764408c3b85
             Period: 60
             Stat: Average
         - Id: m6
@@ -198,7 +198,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-056fba1a84e21dda2
+                  Value: i-0db3135144959852f
             Period: 60
             Stat: Average
         - Id: m7
@@ -209,7 +209,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0291efea65f611d43
+                  Value: i-01234d15917873831
             Period: 60
             Stat: Average
         - Id: m8
@@ -220,7 +220,7 @@ Resources:
               MetricName: NetworkOut
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0a727858186f53239
+                  Value: i-06533a3aabeaf7adc
             Period: 60
             Stat: Average
 
@@ -252,7 +252,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0181a59e1d41114d4
+                  Value: i-01611f2d40e38d03c
             Period: 60
             Stat: Average
         - Id: m2
@@ -263,7 +263,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0a56b62e7f90cd6c4
+                  Value: i-0cd42200e37b68a15
             Period: 60
             Stat: Average
         - Id: m3
@@ -274,7 +274,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0b9c6b3ab3bf55f26
+                  Value: i-0b1f937767ad38819
             Period: 60
             Stat: Average
         - Id: m4
@@ -285,7 +285,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-00c2604ef7379f2f4
+                  Value: i-0c5e5f01fa15a6c72
             Period: 60
             Stat: Average
         - Id: m5
@@ -296,7 +296,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0c2080fc1f5bf88f5
+                  Value: i-03ba61764408c3b85
             Period: 60
             Stat: Average
         - Id: m6
@@ -307,7 +307,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-056fba1a84e21dda2
+                  Value: i-0db3135144959852f
             Period: 60
             Stat: Average
         - Id: m7
@@ -318,7 +318,7 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0291efea65f611d43
+                  Value: i-01234d15917873831
             Period: 60
             Stat: Average
         - Id: m8
@@ -329,6 +329,6 @@ Resources:
               MetricName: CPUUtilization
               Dimensions:
                 - Name: InstanceId
-                  Value: i-0a727858186f53239
+                  Value: i-06533a3aabeaf7adc
             Period: 60
             Stat: Average

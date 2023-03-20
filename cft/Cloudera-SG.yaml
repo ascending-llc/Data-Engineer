@@ -15,11 +15,11 @@ Resources:
         - IpProtocol: tcp
           FromPort: '8888'
           ToPort: '8889'
-          CidrIp: 0.0.0.0/0
+          CidrIp: 108.28.44.8/32
         - IpProtocol: tcp
           FromPort: '10002'
           ToPort: '10002'
-          CidrIp: 0.0.0.0/0
+          CidrIp: 108.28.44.8/32
       Tags:
         -
           Key: Name
@@ -34,19 +34,15 @@ Resources:
         - IpProtocol: tcp
           FromPort: '8088'
           ToPort: '8088'
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: '9870'
-          ToPort: '9870'
-          CidrIp: 0.0.0.0/0
+          CidrIp: 141.156.165.75/32
         - IpProtocol: tcp
           FromPort: '16010'
           ToPort: '16010'
-          CidrIp: 0.0.0.0/0
+          CidrIp: 108.28.44.8/32
         - IpProtocol: tcp
           FromPort: '19888'
           ToPort: '19888'
-          CidrIp: 0.0.0.0/0
+          CidrIp: 141.156.165.75/32
       Tags:
         -
           Key: Name
@@ -84,11 +80,11 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Cloudera Utility Nodes security group
-      # SecurityGroupIngress:
-      #   - IpProtocol: tcp
-      #     FromPort: '0'
-      #     ToPort: '65535'
-      #     SourceSecurityGroupId: !Ref ClouderaInternalSG
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '25000'
+          ToPort: '25000'
+          CidrIp: 141.156.165.75/32
       Tags:
         -
           Key: Name
@@ -117,10 +113,33 @@ Resources:
           FromPort: '7180'
           ToPort: '7180'
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '3389'
+          ToPort: '3389'
+          CidrIp: 108.28.44.8/32
       Tags:
         -
           Key: Name
           Value: ClouderaJumpboxSG
+      VpcId: !Ref VpcId
+
+  ALBSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Cloudera Jumpbox Nodes security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        -
+          Key: Name
+          Value: ALBSecurityGroup
       VpcId: !Ref VpcId
 
 Outputs:
@@ -143,7 +162,7 @@ Outputs:
     Value: !Ref ClouderaInternalSG
     Description: ClouderaInternalSG security group
     Export: 
-      Name: !Sub "${AWS::StackName}-PostgreSQLSG"
+      Name: !Sub "${AWS::StackName}-ClouderaInternalSG"
   ClouderaJumpboxSG:
     Value: !Ref ClouderaJumpboxSG
     Description: ClouderaJumpboxSG security group
@@ -151,3 +170,8 @@ Outputs:
       Name: !Sub "${AWS::StackName}-ClouderaJumpboxSG"
   StackName:
     Value: !Ref AWS::StackName
+  ALBSG:
+    Value: !Ref ALBSG
+    Description: ALBSG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-ALBSG"

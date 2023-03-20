@@ -24,9 +24,3 @@ def switch_instances(event,context):
         response = client.start_instances(InstanceIds=instances)
     elif event['status'] == 'off':
         response = client.stop_instances(InstanceIds=instances)
-
-# def turn_on_instances(event,context):
-#     response = client.start_instances(InstanceIds=instances)
-
-# def turn_off_instances(event,context):
-#     response = client.stop_instances(InstanceIds=instances)
