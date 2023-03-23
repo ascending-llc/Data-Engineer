@@ -1,0 +1,544 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cloudformation template to create Cloudera Resources
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC with Subnets covering 2 Availability zone at least.
+    MinLength: 1
+  SecurityStack:
+    Type: String
+    Description: The name of security cloudformation stack
+    Default: cloudera-security
+
+Resources:
+  ClouderaLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: Ascending-Training
+      Scheme: internet-facing
+      SecurityGroups: 
+        - Fn::ImportValue: !Sub ${SecurityStack}-ClouderaInternalSG
+        - Fn::ImportValue: !Sub ${SecurityStack}-ALBSG
+      Subnets: 
+        - subnet-0b498c1d39491cf96
+        - subnet-0b4f1cef856e97e2d
+      Tags: 
+        - Key: Project
+          Value: Ascending-Training
+      Type: application
+  
+  ClouderaListener80:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions: 
+        - Type: "redirect"
+          RedirectConfig:
+            Protocol: "HTTPS"
+            Port: 443
+            Host: "#{host}"
+            Path: "/#{path}"
+            Query: "#{query}"
+            StatusCode: "HTTP_301"
+      LoadBalancerArn: !Ref ClouderaLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+  ClouderaListener443:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties: 
+      Certificates: 
+        - CertificateArn: arn:aws:acm:us-east-1:847915753970:certificate/44f8d3c7-1f5b-4702-983c-759148611f60
+      DefaultActions: 
+        - Type: "redirect"
+          RedirectConfig:
+            Protocol: "HTTPS"
+            Port: 443
+            Host: "ascendingdc.com"
+            Path: "/#{path}"
+            Query: "#{query}"
+            StatusCode: "HTTP_301"
+      LoadBalancerArn: !Ref ClouderaLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-2016-08
+
+
+  ClouderaYarnTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Cloudera-Yarn
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-03ba61764408c3b85
+          Port: 8088
+
+  ClouderaHbase1TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: HBase-Master-1
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-03ba61764408c3b85
+          Port: 16010
+
+  ClouderaHbase2TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: HBase-Master-2
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0b1f937767ad38819
+          Port: 16010
+
+  ClouderaHbase3TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: HBase-Master-3
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-01611f2d40e38d03c
+          Port: 16010
+
+  ClouderaHdfsTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: HDFS
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-03ba61764408c3b85
+          Port: 9870
+
+  ClouderaHiveTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Hive
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-01234d15917873831
+          Port: 10002
+
+  ClouderaHueTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Hue
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-01234d15917873831
+          Port: 8889
+
+  ClouderaImpalaStateStoreTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-StateStore
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0db3135144959852f
+          Port: 25010
+
+  ClouderaImpalaCatalogTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-catalog
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0db3135144959852f
+          Port: 25020
+
+  ClouderaImpalaDaemon1TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-daemon-1
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0cd42200e37b68a15
+          Port: 25000
+
+  ClouderaImpalaDaemon2TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-daemon-2
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-06533a3aabeaf7adc
+          Port: 25000
+
+  ClouderaImpalaDaemon3TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Impala-daemon-3
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0c5e5f01fa15a6c72
+          Port: 25000
+
+  ClouderaOozieTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Oozie
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0db3135144959852f
+          Port: 11000
+
+  ClouderaSparkTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Spark
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-01611f2d40e38d03c
+          Port: 18088
+
+  ClouderaYarnHistoryTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Yarn-History
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-03ba61764408c3b85
+          Port: 19888
+
+  ClouderaKuduMaster1Group:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Kudu-Master-1
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-03ba61764408c3b85
+          Port: 8051
+
+  ClouderaKuduMaster2Group:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Kudu-Master-2
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-0b1f937767ad38819
+          Port: 8051
+
+  ClouderaKuduMaster3Group:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: Kudu-Master-3
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-01611f2d40e38d03c
+          Port: 8051
+  ClouderaCMGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      Name: cdh-production
+      TargetType: instance
+      VpcId: !Ref VpcId
+      Targets:
+        - Id: i-057f623b76bba613f
+          Port: 7180
+
+
+  ListenerRule1:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaYarnTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'yarn.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 18
+  ListenerRule2:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaHbase1TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'hbase-1.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 19
+  ListenerRule3:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaHbase2TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'hbase-2.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 20
+  ListenerRule4:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaHbase3TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'hbase-3.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 21
+  ListenerRule5:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaHdfsTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'hdfs.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 22
+  ListenerRule6:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaHiveTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'hive.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 23
+  ListenerRule7:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaHueTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'hue.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 24
+  ListenerRule8:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaImpalaStateStoreTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'impala-state.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 25
+  ListenerRule9:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaImpalaCatalogTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'impala-catalog.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 26
+  ListenerRule10:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaImpalaDaemon1TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'impala-daemon-1.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 27
+  ListenerRule11:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaImpalaDaemon2TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'impala-daemon-2.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 28
+  ListenerRule12:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaImpalaDaemon3TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'impala-daemon-3.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 29
+  ListenerRule13:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaOozieTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'oozie.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 30
+  ListenerRule14:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaSparkTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'spark.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 31
+  ListenerRule15:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaYarnHistoryTargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'yarn-history.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 32
+  ListenerRule16:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaKuduMaster1Group
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'kudu-master-1.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 33
+  ListenerRule17:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaKuduMaster2Group
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'kudu-master-2.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 34
+  ListenerRule18:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaKuduMaster3Group
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'kudu-master-3.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 35
+  ListenerRule19:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ClouderaCMGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - 'cloudera-manager.ascendingdc.com'
+      ListenerArn: !Ref ClouderaListener443
+      Priority: 36
+  

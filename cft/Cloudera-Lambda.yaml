@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  SwitchClouderaInstances:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://asc-de-training-templates/lambda/switchInstances/lambda.zip
+      Runtime: python3.8
+      Handler: SwitchInstances.switch_instances
+      Role: !GetAtt LambdaRole.Arn
+      Events:
+        StartEvent:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"on\"}"
+            Schedule: cron(0 1 ? * WED,FRI *)
+            State: DISABLED
+        StopEvent:
+          Type: Schedule
+          Properties:
+            Input: "{ \"status\" : \"off\"}"
+            Schedule: cron(0 3 ? * WED,FRI *)
+            State: DISABLED
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: 2012-10-17
+        Statement: 
+          - 
+            Effect: Allow
+            Principal: 
+              Service: 
+                - lambda.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      Policies:
+        -
+          PolicyName: LambdaRolePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: Allow
+                Action: 
+                  - cloudwatch:*
+                  - s3:*
+                  - logs:*
+                  - ec2:*
+                Resource: "*"

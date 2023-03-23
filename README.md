@@ -5,14 +5,14 @@
 ### Login in Cloudera Manager Instance
 
 ```
-http://54.210.192.41:7180
-https://data.ascendingdc.com
+http://<jumpbox-ip-address>:7180
+https://cloudera-manager.ascendingdc.com
 ```
 
 ### SSH into Cloudera Manager Instance
 
 ```sh
-ssh ec2-user@54.210.192.41
+ssh ec2-user@<jumpbox-ip-address>
 ```
 
 You will login in as ec2-user and you have root privilege, you can use sudo command without password
@@ -22,28 +22,28 @@ You will login in as ec2-user and you have root privilege, you can use sudo comm
 ### 3 MasterNodes
 
 ```
-master-1: ip-172-31-86-198.ec2.internal
-master-2: ip-172-31-93-228.ec2.internal
-master-3: ip-172-31-89-172.ec2.internal
+master-1: ip-10-0-7-212.ec2.internal
+master-2: ip-10-0-1-51.ec2.internal
+master-3: ip-10-0-2-172.ec2.internal
 ```
 ### 3 WorkerNodes
 
 ```
-worker-1: ip-172-31-94-165.ec2.internal
-worker-2: ip-172-31-89-11.ec2.internal
-worker-3: ip-172-31-91-232.ec2.internal
+worker-1: ip-10-0-8-55.ec2.internal
+worker-2: ip-10-0-1-181.ec2.internal
+worker-3: ip-10-0-9-146.ec2.internal
 ```
 
 ### 1 UtilityNode
 
 ```
-utility-1: ip-172-31-91-213.ec2.internal
+utility-1: ip-10-0-14-225.ec2.internal
 ```
 
 ### 1 GatewayNode
 
 ```
-gateway-1: ip-172-31-92-98.ec2.internal
+gateway-1: ip-10-0-4-177.ec2.internal
 ```
 
 ### SSH into Node Instance
@@ -58,17 +58,21 @@ ssh -i ~/.ssh/jumpbox.pem ec2-user@${private_DNS}
 
 ### Start All Node Instances
 
-```sh
-aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function:cloudera-lambda-SwitchClouderaInstances-1NEWLX6F20VFK --payload '{ "status": "on" }' response.json
+In lambda function cloudera-lambda-SwitchClouderaInstances-4JoNeLuISoq1, run the test with content:
+
+```
+{"status": "on"}
 ```
 
 ### Stop All Node Instances
 
-```sh
-aws lambda invoke --function-name arn:aws:lambda:us-east-1:595312265488:function:cloudera-lambda-SwitchClouderaInstances-1NEWLX6F20VFK --payload '{ "status": "off" }' response.json
+In lambda function cloudera-lambda-SwitchClouderaInstances-4JoNeLuISoq1, run the test with content:
+
+```
+{"status": "off"}
 ```
 
-### Create AWS Console User and Jumpbox Linux User with Ansible
+### Create Jumpbox Linux User with Ansible
 
 ```sh
 ansible-playbook CreateUser.yaml -e @/Users/yi/Documents/Data-Engineer/ansible/UserInfo.yaml
@@ -81,7 +85,7 @@ ansible-playbook CreateUser.yaml -e @/Users/yi/Documents/Data-Engineer/ansible/U
 ssh into Cloudera Manager Instance first, then input 
 
 ```sh
-mysql --host=wordpress.c6tqxth4eafz.us-east-1.rds.amazonaws.com --user=root --password
+mysql --host=cloudera.cpnxuicfyso5.us-east-1.rds.amazonaws.com --user=root --password
 ```
 
 enter correct password and you will login in databse
@@ -91,7 +95,7 @@ enter correct password and you will login in databse
 run following command line in your local machine
 
 ```sh
-ssh -L 3306:wordpress.c6tqxth4eafz.us-east-1.rds.amazonaws.com:3306 ec2-user@54.86.193.122
+ssh -L 3306:cloudera.cpnxuicfyso5.us-east-1.rds.amazonaws.com:3306 ec2-user@<jumpbox-ip-address>
 ```
 
 Then you can visit database in localhost:3306 with your own mysql client tool.
@@ -172,6 +176,10 @@ ansible-playbook CreateUser.yaml -e @/home/ec2-user/ansible/UserInfo2.yaml
 ```
 
 
+### Cloudera Settings Troubleshooting
+
+#### Settings for Cloudera manager referring
+
 ```
 # Cloudera Manager Error: Rejecting request originating from x.x.x.x for http://xxx/cmf/services/landingPageStatusContent with referrer https://xxx.com/cmf/home
 
@@ -184,4 +192,50 @@ cd /opt/cloudera/cm/webapp/WEB-INF/spring/mvc-config.xml
 # Restart server
 
 sudo service cloudera-scm-server restart
+```
+
+#### Settings for instances ip addresses changing
+
+```
+# stop scm agent on each instance
+sudo service cloudera-scm-agent stop
+
+# stop scm server on cloudera manager instance (jumpbox)
+sudo service cloudera-scm-server stop
+
+# on each cloudera instances except jumpbox, change the ip address for server ip address
+sudo vi /etc/cloudera-scm-agent/config.ini
+
+# check its own ip adress
+sudo vi /etc/hosts
+
+# restart agent on each instance
+sudo service cloudera-scm-agent restart
+
+# restart server on jumpbox
+sudo service cloudera-scm-server restart
+```
+
+#### HDFS has two standby namenode but zero active namenode
+
+reset zookeeper format in each namenode instance and restart hdfs service.
+
+```
+hdfs zkfc -formatZK
+```
+
+#### Kudu instances has different ip addresses in settings
+
+remove setting files in each kudu master instance
+
+```
+rm -rf /data/kudu/master_xx
+```
+
+#### HDFS check point error
+
+remove folders under /dfs/snn on active HDFS namenode.
+
+```
+rm -rf /dfs/snn/current
 ```
