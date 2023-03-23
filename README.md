@@ -5,14 +5,14 @@
 ### Login in Cloudera Manager Instance
 
 ```
-http://:7180
-https://data.ascendingdc.com
+http://<jumpbox-ip-address>:7180
+https://cloudera-manager.ascendingdc.com
 ```
 
 ### SSH into Cloudera Manager Instance
 
 ```sh
-ssh ec2-user@
+ssh ec2-user@<jumpbox-ip-address>
 ```
 
 You will login in as ec2-user and you have root privilege, you can use sudo command without password
@@ -85,7 +85,7 @@ ansible-playbook CreateUser.yaml -e @/Users/yi/Documents/Data-Engineer/ansible/U
 ssh into Cloudera Manager Instance first, then input 
 
 ```sh
-mysql --host=wordpress.c6tqxth4eafz.us-east-1.rds.amazonaws.com --user=root --password
+mysql --host=cloudera.cpnxuicfyso5.us-east-1.rds.amazonaws.com --user=root --password
 ```
 
 enter correct password and you will login in databse
@@ -95,7 +95,7 @@ enter correct password and you will login in databse
 run following command line in your local machine
 
 ```sh
-ssh -L 3306:cloudera.cpnxuicfyso5.us-east-1.rds.amazonaws.com:3306 ec2-user@
+ssh -L 3306:cloudera.cpnxuicfyso5.us-east-1.rds.amazonaws.com:3306 ec2-user@<jumpbox-ip-address>
 ```
 
 Then you can visit database in localhost:3306 with your own mysql client tool.

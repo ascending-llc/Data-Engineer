@@ -304,7 +304,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'yarn-test.ascendingdc.com'
+              - 'yarn.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 18
   ListenerRule2:
@@ -317,7 +317,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'hbase-1-test.ascendingdc.com'
+              - 'hbase-1.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 19
   ListenerRule3:
@@ -330,7 +330,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'hbase-2-test.ascendingdc.com'
+              - 'hbase-2.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 20
   ListenerRule4:
@@ -343,7 +343,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'hbase-3-test.ascendingdc.com'
+              - 'hbase-3.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 21
   ListenerRule5:
@@ -356,7 +356,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'hdfs-test.ascendingdc.com'
+              - 'hdfs.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 22
   ListenerRule6:
@@ -369,7 +369,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'hive-test.ascendingdc.com'
+              - 'hive.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 23
   ListenerRule7:
@@ -382,7 +382,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'hue-test.ascendingdc.com'
+              - 'hue.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 24
   ListenerRule8:
@@ -395,7 +395,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'impala-state-test.ascendingdc.com'
+              - 'impala-state.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 25
   ListenerRule9:
@@ -408,7 +408,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'impala-catalog-test.ascendingdc.com'
+              - 'impala-catalog.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 26
   ListenerRule10:
@@ -421,7 +421,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'impala-daemon-1-test.ascendingdc.com'
+              - 'impala-daemon-1.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 27
   ListenerRule11:
@@ -434,7 +434,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'impala-daemon-2-test.ascendingdc.com'
+              - 'impala-daemon-2.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 28
   ListenerRule12:
@@ -447,7 +447,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'impala-daemon-3-test.ascendingdc.com'
+              - 'impala-daemon-3.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 29
   ListenerRule13:
@@ -460,7 +460,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'oozie-test.ascendingdc.com'
+              - 'oozie.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 30
   ListenerRule14:
@@ -473,7 +473,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'spark-test.ascendingdc.com'
+              - 'spark.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 31
   ListenerRule15:
@@ -486,7 +486,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'yarn-history-test.ascendingdc.com'
+              - 'yarn-history.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 32
   ListenerRule16:
@@ -499,7 +499,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'kudu-master-1-test.ascendingdc.com'
+              - 'kudu-master-1.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 33
   ListenerRule17:
@@ -512,7 +512,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'kudu-master-2-test.ascendingdc.com'
+              - 'kudu-master-2.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 34
   ListenerRule18:
@@ -525,7 +525,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'kudu-master-3-test.ascendingdc.com'
+              - 'kudu-master-3.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 35
   ListenerRule19:
@@ -538,7 +538,7 @@ Resources:
         - Field: host-header
           HostHeaderConfig:
             Values:
-              - 'cloudera-manager-test.ascendingdc.com'
+              - 'cloudera-manager.ascendingdc.com'
       ListenerArn: !Ref ClouderaListener443
       Priority: 36
   
