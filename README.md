@@ -51,7 +51,7 @@ gateway-1: ip-10-0-4-177.ec2.internal
 After you ssh into Cloudera Manager Instance, use following command line
 
 ```sh
-ssh -i ~/.ssh/jumpbox.pem ec2-user@${private_DNS}
+ssh -i ~/.ssh/cloudera-jumpbox.pem ec2-user@${private_DNS}
 ```
 
 ## Start&Stop Node Instances
