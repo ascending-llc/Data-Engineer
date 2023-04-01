@@ -7,6 +7,18 @@ Parameters:
     Description: Select a VPC with Subnets covering 2 Availability zone at least.
     MinLength: 1
 Resources:
+  MSKSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MSK security group
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          SourceSecurityGroupId: sg-0d6f19f83a8b6840a
+      Tags:
+        -
+          Key: Name
+          Value: MSKSG
+      VpcId: !Ref VpcId
   ClouderaGatewaySG:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -175,3 +187,9 @@ Outputs:
     Description: ALBSG security group
     Export: 
       Name: !Sub "${AWS::StackName}-ALBSG"
+  MSKSG:
+    Value: !Ref MSKSG
+    Description: MSKSG security group
+    Export: 
+      Name: !Sub "${AWS::StackName}-MSKSG"
+

@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: MSK Cluster with all properties
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC with Subnets covering 2 Availability zone at least.
+    MinLength: 1
+  SecurityStack:
+    Type: String
+    Description: The name of security cloudformation stack
+    Default: cloudera-security
+Resources:
+  MSKClusterConfiguration:
+    Type: AWS::MSK::Configuration
+    Properties:
+      Description: Configration for DE TRAINING MSK
+      KafkaVersionsList:
+        - '2.8.1'      
+      Name: DE-Training-MSK-Conf
+      ServerProperties: |
+        auto.create.topics.enable=true
+        default.replication.factor=2
+        min.insync.replicas=2
+        num.io.threads=8
+        num.network.threads=5
+        num.partitions=1
+        num.replica.fetchers=2
+        replica.lag.time.max.ms=30000
+        socket.receive.buffer.bytes=102400
+        socket.request.max.bytes=104857600
+        socket.send.buffer.bytes=102400
+        unclean.leader.election.enable=true
+        zookeeper.session.timeout.ms=18000
+  MSKCloudWatchGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: databricks-msk-logs
+  MSKCluster:
+    Type: 'AWS::MSK::Cluster'
+    Properties:
+      ClusterName: DE-Training-MSK
+      KafkaVersion: 2.8.1
+      NumberOfBrokerNodes: 2
+      EnhancedMonitoring: DEFAULT
+      EncryptionInfo:
+        EncryptionInTransit:
+          ClientBroker: TLS_PLAINTEXT
+          InCluster: true
+      ConfigurationInfo:
+        Arn: !Ref MSKClusterConfiguration
+        Revision: 1
+      ClientAuthentication:
+        Unauthenticated:
+          Enabled: true
+        Sasl:
+          Iam:
+            Enabled: true
+      Tags:
+        Project: DE-Training
+        Owner: Roger
+      LoggingInfo:
+        BrokerLogs:
+          CloudWatchLogs:
+            Enabled: true
+            LogGroup: !Ref MSKCloudWatchGroup
+      BrokerNodeGroupInfo:
+        InstanceType: kafka.t3.small
+        SecurityGroups:
+          - Fn::ImportValue: !Sub ${SecurityStack}-MSKSG
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: 20
+        ClientSubnets:
+          - subnet-02078f7da2c79cef0
+          - subnet-0c1bffd50e51214fe
