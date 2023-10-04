@@ -1,0 +1,208 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CloudFormation template for DE Final Lab
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC with Subnets covering 2 Availability zone at least.
+    MinLength: 1
+
+Globals:
+  Api:
+    OpenApiVersion: '3.0.1'
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+
+Resources:
+
+  # RDS Security Group
+  RdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for RDS instance.
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '5432'
+          ToPort: '5432'
+          CidrIp: 0.0.0.0/0  # Caution: This allows all IPs. Restrict as needed.
+
+  # MSK Security Group
+  MskSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for MSK cluster.
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '9092'  # Default Kafka broker port
+          ToPort: '9092'
+          SourceSecurityGroupId: !GetAtt LambdaExecutionSecurityGroup.GroupId  # Allowing Lambda
+        - IpProtocol: tcp
+          FromPort: '9092'
+          ToPort: '9092'
+          SourceSecurityGroupId: !Ref Ec2SecurityGroup  # Allowing EC2
+
+  # Lambda Execution Security Group
+  LambdaExecutionSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for Lambda function.
+      VpcId: !Ref VpcId
+
+  # EC2 Security Group (Assuming you have EC2 instances)
+  Ec2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2 instances.
+      VpcId: !Ref VpcId
+  
+  #RDS Subnet Group
+  RdsSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "DE Training DB Subnet Group"
+      SubnetIds:
+        - subnet-02078f7da2c79cef0
+        - subnet-0c1bffd50e51214fe
+  
+  # RDS PostgreSQL Database
+  RdsDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: '20'
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      DBName: yellow_taxi_trip
+      MasterUsername: masteruser
+      MasterUserPassword: masterpassword
+      DBSubnetGroupName: !Ref RdsSubnetGroup
+      VPCSecurityGroups:
+        - !Ref RdsSecurityGroup
+
+  # MSK Cluster
+  MSKClusterConfiguration:
+    Type: AWS::MSK::Configuration
+    Properties:
+      Description: Configration for DE TRAINING MSK
+      KafkaVersionsList:
+        - '2.8.1'      
+      Name: DE-Training-MSK-Conf
+      ServerProperties: |
+        auto.create.topics.enable=true
+        default.replication.factor=2
+        min.insync.replicas=2
+        num.io.threads=8
+        num.network.threads=5
+        num.partitions=1
+        num.replica.fetchers=2
+        replica.lag.time.max.ms=30000
+        socket.receive.buffer.bytes=102400
+        socket.request.max.bytes=104857600
+        socket.send.buffer.bytes=102400
+        unclean.leader.election.enable=true
+        zookeeper.session.timeout.ms=18000
+  MSKCloudWatchGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: de-msk-logs
+  MskCluster:
+    Type: AWS::MSK::Cluster
+    Properties:
+      ClusterName: DE-Training-MSK
+      BrokerNodeGroupInfo:
+        InstanceType: kafka.t3.small
+        StorageInfo:
+          EBSStorageInfo:
+            VolumeSize: 20
+        ClientSubnets:
+          - subnet-02078f7da2c79cef0
+          - subnet-0c1bffd50e51214fe  # Replace with your subnet ID
+        SecurityGroups:
+          - !Ref MskSecurityGroup
+      KafkaVersion: 2.8.1
+      NumberOfBrokerNodes: 2
+      EnhancedMonitoring: DEFAULT
+      EncryptionInfo:
+        EncryptionInTransit:
+          ClientBroker: TLS_PLAINTEXT
+          InCluster: true
+      ConfigurationInfo:
+        Arn: !Ref MSKClusterConfiguration
+        Revision: 1
+      ClientAuthentication:
+        Unauthenticated:
+          Enabled: true
+        Sasl:
+          Iam:
+            Enabled: true
+      LoggingInfo:
+        BrokerLogs:
+          CloudWatchLogs:
+            Enabled: true
+            LogGroup: !Ref MSKCloudWatchGroup
+
+  # API Gateway
+  FetchDataApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: training
+
+  # Lambda Function
+  FetchDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: fentch.lambda_handler
+      Runtime: python3.8
+      CodeUri:
+        Bucket: asc-de-training-templates
+        Key: lambda/final_project/fetch_data/fetch.zip
+      Environment:
+        Variables:
+          DB_HOST: !GetAtt [RdsDatabase, Endpoint.Address]
+          DB_PORT: '5432'
+          DB_USER: masteruser
+          DB_PASSWORD: masterpassword
+          DB_NAME: yellow_taxi_trip  # Replace with your DB name
+      Policies:
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonRDSFullAccess
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref RdsSecurityGroup
+        SubnetIds:
+          - subnet-02078f7da2c79cef0  # Replace with your subnet ID
+      Events:
+        FetchData:
+          Type: Api
+          Properties: 
+            Path: /api/fetch-data
+            Method: get
+            RestApiId: !Ref FetchDataApi
+            RequestParameters:
+              - method.request.querystring.start_line: 
+                  Required: true
+                  Caching: false
+              - method.request.querystring.end_line:
+                  Required: true
+                  Caching: false
+
+Outputs:
+  RdsEndpoint:
+    Description: RDS instance endpoint
+    Value: !GetAtt [RdsDatabase, Endpoint.Address]
+
+  MskClusterArn:
+    Description: MSK Cluster ARN
+    Value: !Ref MskCluster
+
+  LambdaFunctionArn:
+    Description: Lambda function ARN
+    Value: !GetAtt [FetchDataFunction, Arn]
+
+  ApiGatewayUrl:
+    Description: API Gateway URL
+    Value: !Sub https://${FetchDataApi}.execute-api.${AWS::Region}.amazonaws.com/training/fetch-data
+

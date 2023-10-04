@@ -7,18 +7,19 @@ Parameters:
     Description: Select a VPC with Subnets covering 2 Availability zone at least.
     MinLength: 1
 Resources:
-  MSKSG:
+  DBSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: MSK security group
+      GroupDescription: Cloudera db allow databricks access security group
       SecurityGroupIngress:
         - IpProtocol: -1
           SourceSecurityGroupId: sg-0d6f19f83a8b6840a
       Tags:
         -
           Key: Name
-          Value: MSKSG
+          Value: DBSG
       VpcId: !Ref VpcId
+
   ClouderaGatewaySG:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -187,9 +188,8 @@ Outputs:
     Description: ALBSG security group
     Export: 
       Name: !Sub "${AWS::StackName}-ALBSG"
-  MSKSG:
-    Value: !Ref MSKSG
-    Description: MSKSG security group
+  DBSG:
+    Value: !Ref DBSG
+    Description: DBSG security group
     Export: 
-      Name: !Sub "${AWS::StackName}-MSKSG"
-
+      Name: !Sub "${AWS::StackName}-DBSG"
